@@ -26,10 +26,10 @@ Ncomponents_PCA=75; %numero de dimensiones con las que vamos a quedarnos.
             digito=zeros(28,28);
             for i=1:28
                 for j=1:28
-%                     digito(i,j)=Trainnumbers.image((i-1)*28+j,k);
-%                     digitot(i,j)=Test_numbers.image((i-1)*28+j,k);
-                    digito(i,j)=trainimages((i-1)*28+j,k);
-                    digitot(i,j)=testimages((i-1)*28+j,k);
+                    digito(i,j)=Trainnumbers.image((i-1)*28+j,k);
+                    digitot(i,j)=Test_numbers.image((i-1)*28+j,k);
+%                     digito(i,j)=trainimages((i-1)*28+j,k);
+%                     digitot(i,j)=testimages((i-1)*28+j,k);
                 end
             end
             
@@ -44,8 +44,8 @@ Ncomponents_PCA=75; %numero de dimensiones con las que vamos a quedarnos.
             X_normt=X_Rowt;
             
            imagen_vector{k}=X_norm;
-%            imagen_label{k}=Trainnumbers.label(k);
-         imagen_label{k}=trainlabels(k);
+           imagen_label{k}=Trainnumbers.label(k);
+%            imagen_label{k}=trainlabels(k);
            
            imagen_vectort{k}=X_normt;
    
@@ -108,13 +108,13 @@ clase=Outputffn;
 
 
 %
-[trainInd,~,testInd] = dividerand([pvalor;clase],0.6,0,0.4);
+[trainInd,~,testInd] = dividerand([pvalor;clase],0.8,0,0.2);
 trainvalor=trainInd(1:end-1,:);
 trainclase=trainInd(end,:);
 testvalor=testInd(1:end-1,:);
 testclase=testInd(end,:);
 %
-[bayclassq, err_qua, posteriorq] = classify(testvalor',trainvalor', trainclase, 'quadratic','empirical');
+[bayclassq, err_qua, posteriorq] = classify(testvalor',trainvalor', trainclase, 'quadratic' );
 % 
 % Comparación
 % err_qua 
@@ -123,7 +123,7 @@ acierto_bay_qua=(1-length(find(bayclassq'~=testclase))/length(testclase))*100;
 
 %
 
-[bayclassl, err_lin, posteriorl] = classify(testvalor',trainvalor', trainclase, 'linear','empirical');
+[bayclassl, err_lin, posteriorl] = classify(testvalor',trainvalor', trainclase, 'Diaglinear','empirical' );
 
 % 
 % Comparación
@@ -182,13 +182,13 @@ acierto_bay_lin=100-length (find(bayclassl'~=testclase))/length(testclase)*100;
 % % % num_errors_bay_qua_post=length (find(bayclassqp'~=clase))/length(clase)*100
 %%
 close all
-[bayclassqt, err_quat, posteriorqt] = classify(pvalort(:,1:10000)',trainvalor', trainclase, 'diagLinear');
+% [bayclassqt, err_quat, posteriorqt] = classify(pvalort(:,1:10000)',trainvalor', trainclase, 'diagLinear');
 
-[bayclassqt2, err_quat, posteriorqt] = classify(pvalort(:,1:10000)',trainvalor', trainclase,'quadratic','empirical');
+[bayclassqt2, err_quat, posteriorqt] = classify(pvalort(:,1:10000)',trainvalor', trainclase,'quadratic');
 
 
 figure;hist(bayclassq)
-figure;hist(bayclassqt)  
+% figure;hist(bayclassqt)  
 figure;hist(bayclassqt2) 
 
 acierto_bay_lin

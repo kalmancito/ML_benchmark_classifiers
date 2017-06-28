@@ -5,10 +5,10 @@ clc
 load Trainnumbers.mat
 load Test_numbers_HW1.mat
 
-trainimages = loadMNISTImages('train-images.idx3-ubyte');
-trainlabels = loadMNISTLabels('train-labels.idx1-ubyte');
-testimages=loadMNISTImages('t10k-images.idx3-ubyte');
-testlabels=loadMNISTLabels('t10k-labels.idx1-ubyte');
+% trainimages = loadMNISTImages('train-images.idx3-ubyte');
+% trainlabels = loadMNISTLabels('train-labels.idx1-ubyte');
+% testimages=loadMNISTImages('t10k-images.idx3-ubyte');
+% testlabels=loadMNISTLabels('t10k-labels.idx1-ubyte');
 rng('shuffle')
 %% =========== Task 2: Classical Classifiers(K-nn)=============
  %
@@ -20,7 +20,7 @@ rng('shuffle')
  %
 %  for cont=1:2
  k_choosed=5;% 5
- Ncomponents_PCA=73;%73 %numero de dimensiones con las que vamos a quedarnos.
+ Ncomponents_PCA=40;%50;%73 %numero de dimensiones con las que vamos a quedarnos.
 
  
  %
@@ -40,12 +40,12 @@ rng('shuffle')
             
             
             X_Row = reshape(digito,1,[]);
-%             [X_norm, mu, sigma]=zscore(X_Row);
-            X_norm=X_Row;
+            [X_norm, mu, sigma]=zscore(X_Row);
+%             X_norm=X_Row;
             
             X_Rowt = reshape(digitot,1,[]);
-%             [X_normt, mu, sigma]=zscore(X_Rowt);
-            X_normt=X_Rowt;
+            [X_normt, mu, sigma]=zscore(X_Rowt);
+%             X_normt=X_Rowt;
             
            imagen_vector{k}=X_norm;
            imagen_label{k}=Trainnumbers.label(k);
@@ -127,7 +127,7 @@ clase=Outputffn;
 % error('kk')
 %
 
-[trainInd,~,testInd] = dividerand([pvalor;clase],2/3,0,1/3);
+[trainInd,~,testInd] = dividerand([pvalor;clase],0.85,0,0.15);
 trainvalor=trainInd(1:end-1,:);
 trainclase=trainInd(end,:);
 testvalor=testInd(1:end-1,:);
@@ -138,7 +138,7 @@ testclase=testInd(end,:);
 % Clasificamos t
 
 % nnclass = knnclassify(testvalor', trainvalor', trainclase,k_choosed,'euclidean'); 
-
+%%
 chiSqrDist = @(x,Z,wt)sqrt((bsxfun(@minus,x,Z).^2)*wt);
 
 w = ones(1,Ncomponents_PCA);
@@ -152,14 +152,16 @@ Mdl2 =  fitcknn(trainvalor',trainclase',...
      'Distance','euclidean',...
     'NumNeighbors',k_choosed);
 
-
+%%
 [nnclass,score,cost] = predict(Mdl2,testvalor');
 % Comparación
 aciertos_knn= (1-length(find(nnclass'~=testclase))/length(testclase))*100
 
+% [nnclass,score,cost] = predict(Mdl2,testvalor');
+% aciertos_knn= (1-length(find(nnclass'~=testclase))/length(testclase))*100
 
 %%
-[nnclasst,score,cost] = predict(Mdl2,pvalort(:,1:5000)');
+ [nnclasst,score,cost] = predict(Mdl2,pvalort(:,:)');
 
 % 
 % %
