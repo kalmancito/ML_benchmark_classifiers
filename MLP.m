@@ -180,7 +180,7 @@ neurons=20; % 10
 P=reducedData;
 Pt=reducedDatat;
 T=Outputffn;
-
+%%
 netff = feedforwardnet(neurons);
 %     {'tansig' 'purelin'},...
 %     'trainlm',...
@@ -195,13 +195,13 @@ netff.trainParam.show = 100;
 netff.divideParam.trainRatio = 70/100;
 netff.divideParam.valRatio = 15/100;
 netff.divideParam.testRatio = 15/100;
-
+%%
 [netff,tr] = train(netff,P,T);
 %%
-% y = netff(P);
-y=netpatern(P);
-% yt = netff(Pt);
-yt=netpatern(Pt);
+y = netff(P);
+% y=netpatern(P);
+yt = netff(Pt);
+% yt=netpatern(Pt);
 [~,yt2]=max(yt);
 hist(yt2)
 figure
