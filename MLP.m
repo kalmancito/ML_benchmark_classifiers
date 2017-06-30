@@ -2,7 +2,7 @@ clear all
 close all
 clc
 load Trainnumbers.mat
-load Test_numbers_HW1.mat
+load Test_numbers_HW1july.mat
 
  %% =========== Task 4a: Neural Classifiers(FFN)=============
  %
@@ -20,15 +20,25 @@ load Test_numbers_HW1.mat
             for i=1:28
                 for j=1:28
                     digito(i,j)=Trainnumbers.image((i-1)*28+j,k);
+                    digitot(i,j)=Test_numbers.image((i-1)*28+j,k);
+%                     digito(i,j)=trainimages((i-1)*28+j,k);
+%                     digitot(i,j)=testimages((i-1)*28+j,k);
                 end
             end
             
             
             X_Row = reshape(digito,1,[]);
-            [X_norm, mu, sigma]=zscore(X_Row);
-
+%             [X_norm, mu, sigma]=zscore(X_Row);
+            X_norm=X_Row;
+            
+            
+            X_Rowt = reshape(digitot,1,[]);
+%             [X_norm, mu, sigma]=zscore(X_Row);
+            X_normt=X_Rowt;
 
            imagen_vector{k}=X_norm;
+           imagen_vectort{k}=X_normt;
+           
            imagen_label{k}=zeros(10,1);
            imagen_label{k}(Trainnumbers.label(k)+1)=1;
     end
@@ -36,13 +46,16 @@ load Test_numbers_HW1.mat
 
 
 Inputffn=cell2mat(imagen_vector');
+Inputffnt=cell2mat(imagen_vectort');
 Inputffn=Inputffn';
+Inputffnt=Inputffnt';
 Outputffn=cell2mat(imagen_label);
 Outputffn=Outputffn*1;
 %
 
 %  [X_norm, mu, sigma]=zscore(Inputffn');
     X_norm=Inputffn';
+    X_normt=Inputffnt';
 
             %  Run PCA   ---> [U, S] = pca(X_norm);
 C_X=cov(X_norm);
@@ -65,10 +78,12 @@ size(X_norm);
 %
 error=S(1,1);
 reducedData =  transf_mat*X_norm';
+reducedDatat =  transf_mat*X_normt';
  %%
  %  
 neurons=25;
 inputs=reducedData;
+inputst=reducedDatat;
 targets=Outputffn;
 %
 
@@ -96,12 +111,13 @@ performance = perform(netpatern,targets,outputs)
 
 % [netpatern,tr] = train(netpatern,inputs,targets);
 y = netpatern(inputs);
+yt = netpatern(inputst);
 %%
 figure
 plotconfusion(targets,y)
 
 fprintf('Program paused. Press enter to continue.\n');
-% pause;
+pause;
 
  %% =========== Task 4b: Neural Classifiers(FFN)=============
  %
@@ -196,16 +212,16 @@ netff.divideParam.trainRatio = 70/100;
 netff.divideParam.valRatio = 15/100;
 netff.divideParam.testRatio = 15/100;
 %%
-[netff,tr] = train(netff,P,T);
+% [netff,tr] = train(netff,P,T);
 %%
-y = netff(P);
-% y=netpatern(P);
-yt = netff(Pt);
-% yt=netpatern(Pt);
+% y = netff(P);
+y=netpatern(P);
+% yt = netff(Pt);
+yt=netpatern(Pt);
 [~,yt2]=max(yt);
 hist(yt2)
 figure
 plotconfusion(T,y)
 
 fprintf('Program paused. Press enter to continue.\n');
-pause;
+

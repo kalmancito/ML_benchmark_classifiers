@@ -36,9 +36,9 @@ load Trainnumbers.mat
             
             
             X_Row = reshape(digito,1,[]);
-            [X_norm, mu, sigma]=zscore(X_Row);
+%             [X_norm, mu, sigma]=zscore(X_Row);
 
-
+            X_norm=X_Row;
            imagen_vector{k}=X_norm;
            imagen_label{k}=Trainnumbers.label(k);
 

@@ -1,8 +1,9 @@
 clear all
 close all
 clc
+%%
 load Trainnumbers.mat
-% load Test_numbers_HW1.mat 
+%load Test_numbers_HW1.mat 
 
  %% =========== Task 4a: Neural Classifiers(FFN)=============
  %
@@ -34,7 +35,9 @@ som_neu=10;
             
             
             X_Row = reshape(digito,1,[]);
-            [X_norm, mu, sigma]=zscore(X_Row);
+%             [X_norm, mu, sigma]=zscore(X_Row);
+
+            X_norm=X_Row;
 
 
            imagen_vector{k}=X_norm;
@@ -131,13 +134,14 @@ NeurPosit = net.IW{:,:}';
 % por cada clase de las muestras de entrenamiento
 NoNeur = filas*colum;
 NoClases = 10;
+%%
 % Inicializo por eficiencia
 Ranking(NoNeur,NoClases)=0;
 NeurClas(NoNeur)=0;
 % Neuronas que se activan para puntos de entrenamiento
 ActivedNeurX = vec2ind(net(reducedData));
 % Ranking
-for i=1:length(trainvalor(1,:));
+for i=1:length(trainvalor(1,:))
 neu = ActivedNeurX(i);
 clas = trainclase(i)+1;
 Ranking(neu,clas) = Ranking(neu,clas)+1;

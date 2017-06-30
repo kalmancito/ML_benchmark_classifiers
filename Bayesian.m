@@ -2,7 +2,7 @@ clear all
 close all
 clc
 load Trainnumbers.mat
-load Test_numbers_HW1.mat
+load Test_numbers_HW1july.mat
 
 trainimages = loadMNISTImages('train-images.idx3-ubyte');
 trainlabels = loadMNISTLabels('train-labels.idx1-ubyte');
